@@ -10,7 +10,7 @@
 #include "sgx_uae_service.h"
 #include "app.h"
 #include "enclave_u.h"
-#define MAX_BUF_LEN 100
+#define MAX_BUF_LEN 1024
 /* Global EID shared by multiple threads */
 sgx_enclave_id_t eid = 0;
 
@@ -227,7 +227,7 @@ int SGX_CDECL main(int argc, char *argv[])
     (void)(argc);
     (void)(argv);
 
-    char buffer[MAX_BUF_LEN] = "Hello World!!!!";
+    char buffer[MAX_BUF_LEN] = "Test Data: AAAAAAAAAAAAAAAAAA\nBBBBBBBBBBBBBBBBBBBBBB\nCCCCCCCCCCCCCCCCCCCCCCCCC\nDDDDDDDDDDDDDDDDDDDDDDDDD\n!!!!!!!!!!!!!!\n";
     /* Initialize the enclave */
     if(initialize_enclave() < 0){
         printf("Enter a character before exit ...\n");
@@ -239,31 +239,31 @@ int SGX_CDECL main(int argc, char *argv[])
 
 	uint64_t file_size = 0;    
 	SGX_FILE* fp;
-	const char* filename = "SGX_File_Protection_System.txt";
+	const char* filename = "data.enc";
 	const char* mode = "w+";
 
 	//file Open
 	ret = ecall_file_open(eid, &fp, filename, mode);
 
 	//Get Enclve Secret
-	ret = ecall_enclaveString(eid, buffer, MAX_BUF_LEN);
-	printf("Enclave Secret Value: %s\n", buffer);
+	//ret = ecall_enclaveString(eid, buffer, MAX_BUF_LEN);
+	//printf("Enclave Secret Value: %s\n", buffer);
 
 	//Write to file
 	size_t sizeOfWrite = 0;
 	ret = ecall_file_write(eid, &sizeOfWrite, fp, buffer);
-	printf("Size of Write=  %d\n", sizeOfWrite);
+	printf("Size of Write =  %d\n", sizeOfWrite);
 
 	//Read from File
 	ret = ecall_file_get_file_size(eid, &file_size, fp);
 	size_t sizeOfRead = 0;
-	char data[100];
+	char data[MAX_BUF_LEN];
 	ret = ecall_file_read(eid, &sizeOfRead, fp, data, file_size);
-	printf("Size of Read= %d\n", sizeOfRead);
+	printf("Size of Read = %d\n", sizeOfRead);
 
 
 	data[sizeOfRead] = '\0';
-	printf("Read Data= %s\n", data);
+	printf("Read Data = %s\n", data);
 
 	int32_t fileHandle;
 	ret = ecall_file_close(eid, &fileHandle, fp);

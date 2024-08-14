@@ -64,11 +64,6 @@ size_t ecall_file_write(SGX_FILE* fp, char data[100])
 	size_t len = strlen(data);
 	sizeofWrite = sgx_fwrite(data, sizeof(char), len, fp);
 
-	/*for (int i = 0; i < 5; i++) 
-	{
-		char buffer[] = { 'x' , 'c' };
-		sizeofWrite += sgx_fwrite(buffer, sizeof(char), sizeof(buffer), fp);
-	}*/
 	return sizeofWrite;
 }
 
@@ -79,7 +74,7 @@ size_t ecall_file_read(SGX_FILE* fp, char* readData, uint64_t size)
 	sgx_fseek(fp, 0, SEEK_END);
 	uint64_t finalN = sgx_ftell(fp);
 	sgx_fseek(fp, 0, SEEK_SET);
-        printf("file size%d\n", finalN);
+        printf("file size %d\n", finalN);
 	data = (char*)malloc(sizeof(char)*finalN);
 	memset(data, 0, sizeof(char)*finalN);
 
