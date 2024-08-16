@@ -21,12 +21,12 @@
 
 void printf(const char *fmt, ...)
 {
-    char buf[BUFSIZ] = {'\0'};
-    va_list ap;
-    va_start(ap, fmt);
-    vsnprintf(buf, BUFSIZ, fmt, ap);
-    va_end(ap);
-    ocall_print_string(buf);
+	char buf[BUFSIZ] = {'\0'};
+	va_list ap;
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZ, fmt, ap);
+	va_end(ap);
+	ocall_print_string(buf);
 }
 
 
@@ -74,7 +74,7 @@ size_t ecall_file_read(SGX_FILE* fp, char* readData, uint64_t size)
 	sgx_fseek(fp, 0, SEEK_END);
 	uint64_t finalN = sgx_ftell(fp);
 	sgx_fseek(fp, 0, SEEK_SET);
-        printf("file size %d\n", finalN);
+	printf("file size %d\n", finalN);
 	data = (char*)malloc(sizeof(char)*finalN);
 	memset(data, 0, sizeof(char)*finalN);
 
